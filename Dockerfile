@@ -1,5 +1,7 @@
-FROM n8nio/n8n:latest
+FROM mwader/static-ffmpeg:7.1 AS ffmpeg
+
+FROM docker.io/n8nio/n8n:latest
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+COPY --from=ffmpeg /ffmpeg  /usr/local/bin/ffmpeg
+COPY --from=ffmpeg /ffprobe /usr/local/bin/ffprobe
 USER node
